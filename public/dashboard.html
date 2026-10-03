@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasCloud Sovereign - Control Console</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sovereign: {
+                            900: '#060B13',
+                            800: '#0B132B',
+                            700: '#1C2541',
+                            accent: '#00F5D4',
+                            emerald: '#10B981',
+                            danger: '#FF0055'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #04080F;
+            color: #E2E8F0;
+            font-family: 'Cairo', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(11, 19, 43, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 245, 212, 0.12);
+        }
+        .glass-card {
+            background: rgba(28, 37, 65, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(0, 245, 212, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 245, 212, 0.1);
+        }
+        .neon-glow {
+            box-shadow: 0 0 15px rgba(0, 245, 212, 0.25);
+        }
+        .pulse-dot {
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Top Navigation Header -->
+    <header class="glass-panel sticky top-0 z-50 border-b border-sovereign-accent/20 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sovereign-accent to-emerald-500 flex items-center justify-center text-sovereign-900 font-black text-xl shadow-lg">
+                    A
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-wider text-white flex items-center gap-2">
+                        AtlasCloud <span class="text-sovereign-accent text-xs px-2 py-0.5 rounded bg-sovereign-accent/10 border border-sovereign-accent/30">SOVEREIGN</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">البنية التحتية السحابية السيادية للجمهورية الجزائرية</p>
+                </div>
+            </div>
+
+            <!-- Global Status Pills -->
+            <div class="hidden md:flex items-center gap-6 text-xs">
+                <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-emerald-500/30">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 pulse-dot"></span>
+                    <span class="text-slate-300">نسبة الجاهزية العامة: <strong class="text-emerald-400">99.99%</strong></span>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-sovereign-accent/30">
+                    <i class="fa-solid fa-shield-halved text-sovereign-accent"></i>
+                    <span class="text-slate-300">الامتثال: <strong class="text-sovereign-accent">القانون 18-07 / ANPDP</strong></span>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-700">
+                    <i class="fa-solid fa-coins text-amber-400"></i>
+                    <span class="text-slate-300">الفوترة: <strong class="text-white">DZD (الدينار)</strong></span>
+                </div>
+            </div>
+
+            <!-- User Menu -->
+            <div class="flex items-center gap-3">
+                <a href="/" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-2 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>المنصة الرئيسية</span>
+                </a>
+                <button class="bg-sovereign-accent/10 hover:bg-sovereign-accent/20 text-sovereign-accent border border-sovereign-accent/40 px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>atlas-cli v2.4</span>
+                </button>
+                <div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-sm text-sovereign-accent">
+                    ص
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto w-full px-6 py-8 flex-1 space-y-8">
+
+        <!-- Banner Alert -->
+        <div class="glass-card rounded-2xl p-6 bg-gradient-to-r from-sovereign-700/60 via-sovereign-800/80 to-sovereign-900/90 border-r-4 border-r-sovereign-accent flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-1">
+                <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-server text-sovereign-accent"></i>
+                    الشبكة السيادية الموزعة عبر 4 مناطق داخلية نشطة
+                </h2>
+                <p class="text-sm text-slate-300">كافة البيانات مشفرة باستخدام مفاتيح HSM الوطنية ومخزنة حصرياً داخل الحدود الجغرافية للوطن.</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="runChaosSimulation()" class="bg-sovereign-danger/20 hover:bg-sovereign-danger/30 text-sovereign-danger border border-sovereign-danger/50 px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer shadow-lg shadow-sovereign-danger/10">
+                    <i class="fa-solid fa-bolt"></i>
+                    محاكاة قطع كابل العاصمة (Chaos Test)
+                </button>
+                <button onclick="resetSimulation()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-2 rounded-xl text-xs font-medium transition cursor-pointer">
+                    إعادة ضبط
+                </button>
+            </div>
+        </div>
+
+        <!-- Multi-Region Infrastructure Map & Metrics -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Region 1: Algiers -->
+            <div class="glass-card p-5 rounded-2xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-400">المنطقة الرئيسية</span>
+                    <span id="status-dz-north" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">ONLINE</span>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">dz-north-1 (الجزائر)</h3>
+                    <p class="text-xs text-slate-400">باب الزوار / بن عكنون</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800 flex justify-between text-xs">
+                    <span class="text-slate-400">الاستجابة: <strong id="latency-dz-north" class="text-sovereign-accent">4ms</strong></span>
+                    <span class="text-slate-400">الحمولة: <strong class="text-white">42%</strong></span>
+                </div>
+            </div>
+
+            <!-- Region 2: Oran -->
+            <div class="glass-card p-5 rounded-2xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-400">منطقة التعافي (DR)</span>
+                    <span id="status-dz-west" class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">SYNCED</span>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">dz-west-1 (وهران)</h3>
+                    <p class="text-xs text-slate-400">البوابة البحرية الغربية</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800 flex justify-between text-xs">
+                    <span class="text-slate-400">الاستجابة: <strong class="text-sovereign-accent">11ms</strong></span>
+                    <span class="text-slate-400">مزامنة DB: <strong class="text-emerald-400">RPO = 0s</strong></span>
+                </div>
+            </div>
+
+            <!-- Region 3: Constantine -->
+            <div class="glass-card p-5 rounded-2xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-400">منطقة الشرق</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">ACTIVE</span>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">dz-east-1 (قسنطينة)</h3>
+                    <p class="text-xs text-slate-400">العقدة الجبلية المعزولة</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800 flex justify-between text-xs">
+                    <span class="text-slate-400">الاستجابة: <strong class="text-sovereign-accent">8ms</strong></span>
+                    <span class="text-slate-400">Raft Quorum: <strong class="text-white">OK</strong></span>
+                </div>
+            </div>
+
+            <!-- Region 4: Ouargla -->
+            <div class="glass-card p-5 rounded-2xl space-y-3">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-400">عقدة الجنوب والفيلاحة</span>
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">ACTIVE</span>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-white">dz-south-1 (ورقلة)</h3>
+                    <p class="text-xs text-slate-400">حاسي مسعود / IoT Edge</p>
+                </div>
+                <div class="pt-2 border-t border-slate-800 flex justify-between text-xs">
+                    <span class="text-slate-400">الاستجابة: <strong class="text-sovereign-accent">15ms</strong></span>
+                    <span class="text-slate-400">PostGIS Edge: <strong class="text-white">ON</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Workloads & Managed Services -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Managed K8s Clusters -->
+            <div class="glass-card rounded-2xl p-6 lg:col-span-2 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                    <h3 class="font-bold text-white flex items-center gap-2">
+                        <i class="fa-solid fa-cubes text-sovereign-accent"></i>
+                        عناقيد كوبرنيتيس المدارة (Sovereign Managed K8s)
+                    </h3>
+                    <button onclick="deployNewCluster()" class="text-xs text-sovereign-accent hover:underline font-semibold cursor-pointer">+ نشر عنقود جديد</button>
+                </div>
+
+                <div class="space-y-3" id="clusters-container">
+                    <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">k8s-fintech-prod-alg</h4>
+                                <p class="text-xs text-slate-400">Talos OS • Cilium eBPF • WireGuard Encrypted</p>
+                            </div>
+                        </div>
+                        <div class="text-left text-xs">
+                            <span class="block font-mono text-white">8 العقد (Nodes)</span>
+                            <span class="text-slate-400">v1.30.2</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-slate-900/60 border border-slate-800 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                            <div>
+                                <h4 class="font-bold text-sm text-white">pg-db-satim-payments (PostgreSQL 16)</h4>
+                                <p class="text-xs text-slate-400">Patroni Sync HA • PostGIS • HSM Encrypted</p>
+                            </div>
+                        </div>
+                        <div class="text-left text-xs">
+                            <span class="block font-mono text-emerald-400">PRIMARY: dz-north-1</span>
+                            <span class="text-slate-400">STANDBY: dz-west-1</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Web Terminal Output Simulation -->
+            <div class="glass-card rounded-2xl p-6 space-y-3 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-terminal text-emerald-400"></i>
+                            Atlas Interactive Shell
+                        </h3>
+                        <span class="text-[10px] font-mono text-slate-400">BGP ANYCAST ROUTER</span>
+                    </div>
+                    <div id="terminal-window" class="mt-4 p-4 rounded-xl bg-black/80 font-mono text-xs space-y-2 h-48 overflow-y-auto text-slate-300 border border-slate-800">
+                        <p class="text-slate-500"># AtlasCloud Sovereign Shell v2.4.0</p>
+                        <p class="text-emerald-400">$ atlas status --region dz-north-1</p>
+                        <p>[INFO] BGP Anycast routes operational.</p>
+                        <p>[INFO] PostGIS HA Cluster connected (Lat: 0.2ms).</p>
+                        <p class="text-sovereign-accent">$ _</p>
+                    </div>
+                </div>
+                <button onclick="executeCommand()" class="w-full py-2 bg-sovereign-accent/10 hover:bg-sovereign-accent/20 border border-sovereign-accent/40 rounded-xl text-sovereign-accent font-bold text-xs transition cursor-pointer">
+                    تشغيل فحص الأمان الذاتي (Execute Security Audit)
+                </button>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Bottom Footer -->
+    <footer class="glass-panel border-t border-slate-800 px-6 py-4 text-center text-xs text-slate-500">
+        <p>AtlasCloud Sovereign Platform © 2026. مصممة ومدارة بالكامل وفق المعايير والسيادة الوطنية للجمهورية الجزائرية.</p>
+    </footer>
+
+    <!-- Interactive JavaScript Logic -->
+    <script>
+        function logToTerminal(message, type = 'info') {
+            const term = document.getElementById('terminal-window');
+            const p = document.createElement('p');
+            if(type === 'error') p.className = 'text-sovereign-danger font-bold';
+            else if(type === 'success') p.className = 'text-emerald-400 font-bold';
+            else if(type === 'warn') p.className = 'text-amber-400';
+            else p.className = 'text-slate-300';
+            
+            p.innerText = `[${new Date().toLocaleTimeString('ar-DZ')}] ${message}`;
+            term.appendChild(p);
+            term.scrollTop = term.scrollHeight;
+        }
+
+        function executeCommand() {
+            logToTerminal("$ atlas audit --compliance law-18-07");
+            setTimeout(() => {
+                logToTerminal("-> Verifying data encryption at rest (AES-256-GCM)... OK", "success");
+            }, 400);
+            setTimeout(() => {
+                logToTerminal("-> Checking ANPDP & ARPCE Sovereignty Tags... VERIFIED", "success");
+            }, 800);
+            setTimeout(() => {
+                logToTerminal("-> Zero Egress Data transfer leaving national territory confirmed.", "success");
+            }, 1200);
+        }
+
+        function runChaosSimulation() {
+            logToTerminal("!!! SIMULATING FIBRE CUT IN ALGIERS (dz-north-1) !!!", "error");
+            
+            document.getElementById('status-dz-north').className = "px-2 py-0.5 rounded text-[10px] font-bold bg-sovereign-danger/20 text-sovereign-danger border border-sovereign-danger/50";
+            document.getElementById('status-dz-north').innerText = "LINK CUT";
+            document.getElementById('latency-dz-north').innerText = "TIMEOUT";
+
+            setTimeout(() => {
+                logToTerminal("[Patroni HA] Heartbeat lost with Algiers Primary.", "warn");
+            }, 300);
+
+            setTimeout(() => {
+                logToTerminal("[Raft Consensus] Promoting dz-west-1 (Oran) to PRIMARY...", "warn");
+            }, 600);
+
+            setTimeout(() => {
+                logToTerminal("✓ Failover Successful! New Leader Active in Oran.", "success");
+                logToTerminal("Total Downtime: 240ms | RPO Achieved: 0 Bytes Lost.", "success");
+                
+                document.getElementById('status-dz-west').innerText = "PRIMARY LEADER";
+                document.getElementById('status-dz-west').className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 animate-pulse";
+            }, 1100);
+        }
+
+        function resetSimulation() {
+            document.getElementById('status-dz-north').className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+            document.getElementById('status-dz-north').innerText = "ONLINE";
+            document.getElementById('latency-dz-north').innerText = "4ms";
+
+            document.getElementById('status-dz-west').className = "px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+            document.getElementById('status-dz-west').innerText = "SYNCED";
+
+            logToTerminal("✓ All 4 regions restored to nominal mesh state.", "success");
+        }
+
+        function deployNewCluster() {
+            logToTerminal("$ atlas cluster create k8s-agri-iot-hsm --region dz-south-1 --nodes 4");
+            setTimeout(() => {
+                logToTerminal("-> Bootstrapping Talos OS MicroVMs in Ouargla...", "warn");
+            }, 500);
+            setTimeout(() => {
+                logToTerminal("-> Cilium eBPF mesh connected to BGP Anycast.", "warn");
+            }, 1000);
+            setTimeout(() => {
+                logToTerminal("✓ Cluster 'k8s-agri-iot-hsm' ready in 42s! Kubeconfig generated.", "success");
+                
+                const container = document.getElementById('clusters-container');
+                const newCard = document.createElement('div');
+                newCard.className = "p-4 rounded-xl bg-slate-900/60 border border-cyan-800/60 flex items-center justify-between";
+                newCard.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-3 rounded-full bg-cyan-400 animate-pulse"></div>
+                        <div>
+                            <h4 class="font-bold text-sm text-white">k8s-agri-iot-hsm (Ouargla Edge)</h4>
+                            <p class="text-xs text-slate-400">Talos OS • PostGIS Edge • Southern POP</p>
+                        </div>
+                    </div>
+                    <div class="text-left text-xs">
+                        <span class="block font-mono text-cyan-300">4 العقد (Nodes)</span>
+                        <span class="text-slate-400">v1.30.2</span>
+                    </div>
+                `;
+                container.appendChild(newCard);
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

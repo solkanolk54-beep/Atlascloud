@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AtlasCloud Sovereign - Control Console v2</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Cairo -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sovereign: {
+                            900: '#04080F',
+                            800: '#0B132B',
+                            700: '#1C2541',
+                            accent: '#00F5D4',
+                            emerald: '#10B981',
+                            amber: '#F59E0B',
+                            danger: '#FF0055'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Cairo', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #04080F; color: #E2E8F0; font-family: 'Cairo', sans-serif; }
+        .glass-panel { background: rgba(11, 19, 43, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(0, 245, 212, 0.12); }
+        .glass-card { background: rgba(28, 37, 65, 0.35); border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.25s ease; }
+        .glass-card:hover { border-color: rgba(0, 245, 212, 0.3); transform: translateY(-2px); }
+        .nav-item.active { background: rgba(0, 245, 212, 0.1); border-right: 3px solid #00F5D4; color: #00F5D4; }
+        .pulse-emerald { animation: pulse-emerald-anim 2s infinite; }
+        @keyframes pulse-emerald-anim {
+            0% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0.6); }
+            70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(16, 185, 129, 0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- Header Navigation -->
+    <header class="glass-panel sticky top-0 z-50 border-b border-sovereign-accent/20 px-6 py-3">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sovereign-accent to-emerald-500 flex items-center justify-center text-sovereign-900 font-black text-xl shadow-lg">
+                    A
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold tracking-wider text-white flex items-center gap-2">
+                        AtlasCloud <span class="text-sovereign-accent text-[10px] px-2 py-0.5 rounded bg-sovereign-accent/10 border border-sovereign-accent/30 font-mono font-bold">SOVEREIGN V2</span>
+                    </h1>
+                    <p class="text-xs text-slate-400">البنية التحتية السحابية السيادية للجمهورية الجزائرية</p>
+                </div>
+            </div>
+
+            <!-- Global Status Bar -->
+            <div class="hidden lg:flex items-center gap-6 text-xs">
+                <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-emerald-500/30">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 pulse-emerald"></span>
+                    <span class="text-slate-300">نسبة التوفر العام: <strong class="text-emerald-400">99.99%</strong></span>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-sovereign-accent/30">
+                    <i class="fa-solid fa-shield-halved text-sovereign-accent"></i>
+                    <span class="text-slate-300">السيادة: <strong class="text-sovereign-accent">القانون 18-07 / ANPDP</strong></span>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-full border border-slate-700">
+                    <i class="fa-solid fa-coins text-amber-400"></i>
+                    <span class="text-slate-300">العملة: <strong class="text-white">DZD (الدينار)</strong></span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="/" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>المنصة الرئيسية</span>
+                </a>
+                <a href="/dashboard.html" class="bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-terminal"></i>
+                    <span>Console v1</span>
+                </a>
+                <div class="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-sm text-sovereign-accent">
+                    ص
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- App Body with Sidebar Layout -->
+    <div class="max-w-7xl mx-auto w-full px-6 py-6 flex-1 grid grid-cols-1 md:grid-cols-12 gap-6">
+
+        <!-- Sidebar Navigation -->
+        <aside class="md:col-span-3 glass-panel rounded-2xl p-4 h-fit space-y-2">
+            <div class="px-3 py-2 text-[11px] font-bold text-slate-500 tracking-wider">لوحات القيادة والخدمات</div>
+            
+            <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800/50 transition cursor-pointer text-right">
+                <i class="fa-solid fa-chart-line text-sm"></i>
+                <span>نظرة عامة على الشبكة</span>
+            </button>
+
+            <button onclick="switchTab('postgis')" id="nav-postgis" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800/50 transition cursor-pointer text-right">
+                <i class="fa-solid fa-database text-sm text-sovereign-accent"></i>
+                <span>إدارة قواعد بيانات PostGIS</span>
+            </button>
+
+            <button onclick="switchTab('iot-logistics')" id="nav-iot-logistics" class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800/50 transition cursor-pointer text-right">
+                <i class="fa-solid fa-truck-ramp-box text-sm text-emerald-400"></i>
+                <span>مراقبة IoT وسلاسل التبريد</span>
+            </button>
+
+            <div class="pt-4 border-t border-slate-800/80 px-3 py-2 text-[11px] font-bold text-slate-500 tracking-wider">الأمان والأنظمة</div>
+            
+            <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 space-y-2 text-xs">
+                <div class="flex items-center justify-between text-slate-400">
+                    <span>العقدة النشطة:</span>
+                    <span class="text-sovereign-accent font-mono">dz-north-1</span>
+                </div>
+                <div class="flex items-center justify-between text-slate-400">
+                    <span>التشفير:</span>
+                    <span class="text-emerald-400 font-mono">HSM AES-256</span>
+                </div>
+                <div class="flex items-center justify-between text-slate-400">
+                    <span>عقدة الجنوب:</span>
+                    <span class="text-cyan-400 font-mono">dz-south-1 (ورقلة)</span>
+                </div>
+            </div>
+
+            <!-- Quick Action Button in Sidebar -->
+            <div class="pt-2">
+                <button onclick="triggerQuickChaos()" class="w-full py-2 px-3 bg-sovereign-danger/10 hover:bg-sovereign-danger/20 border border-sovereign-danger/40 text-sovereign-danger text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 cursor-pointer">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>اختبار الصمود السريع</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content View Area -->
+        <main class="md:col-span-9 space-y-6">
+
+            <!-- PAGE 1: OVERVIEW DASHBOARD -->
+            <div id="page-dashboard" class="space-y-6">
+                <div class="glass-card rounded-2xl p-6 border-r-4 border-r-sovereign-accent flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white">الشبكة السيادية الوطنية الموزعة</h2>
+                        <p class="text-xs text-slate-400">حالة الربط بين المناطق الأربع (`dz-north-1`, `dz-west-1`, `dz-east-1`, `dz-south-1`)</p>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold shrink-0">
+                        كل الأنظمة تعمل بكفاءة عالية
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="glass-card p-5 rounded-2xl">
+                        <div class="text-slate-400 text-xs font-bold mb-1">عناقيد Kubernetes (Talos)</div>
+                        <div class="text-2xl font-black text-white">12 عُقدة</div>
+                        <div class="text-xs text-emerald-400 mt-2 flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                            <span>Cilium eBPF Encrypted Mesh</span>
+                        </div>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl">
+                        <div class="text-slate-400 text-xs font-bold mb-1">قواعد بيانات Patroni HA</div>
+                        <div class="text-2xl font-black text-sovereign-accent">PostgreSQL 16</div>
+                        <div class="text-xs text-slate-400 mt-2 font-mono">زمن التعافي RTO &lt; 300ms (RPO=0)</div>
+                    </div>
+                    <div class="glass-card p-5 rounded-2xl">
+                        <div class="text-slate-400 text-xs font-bold mb-1">التخزين الشيئي S3</div>
+                        <div class="text-2xl font-black text-amber-400">2.4 Terabyte</div>
+                        <div class="text-xs text-slate-400 mt-2">Triple Replication (العاصمة + وهران)</div>
+                    </div>
+                </div>
+
+                <!-- 4 Regions Real-time Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                    <div class="glass-card p-4 rounded-xl space-y-1.5">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-white">الجزائر العاصمة</span>
+                            <span class="text-emerald-400 font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/60 border border-emerald-800">dz-north-1</span>
+                        </div>
+                        <div class="text-xs text-slate-400">الاستجابة: <strong class="text-sovereign-accent">4ms</strong></div>
+                        <div class="text-[11px] text-slate-500">حركة الدفع الوطني SATIM</div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl space-y-1.5">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-white">وهران (DR Hub)</span>
+                            <span class="text-emerald-400 font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/60 border border-emerald-800">dz-west-1</span>
+                        </div>
+                        <div class="text-xs text-slate-400">الاستجابة: <strong class="text-sovereign-accent">11ms</strong></div>
+                        <div class="text-[11px] text-slate-500">مزامنة متواصلة RPO=0</div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl space-y-1.5">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-white">قسنطينة (Highland)</span>
+                            <span class="text-emerald-400 font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/60 border border-emerald-800">dz-east-1</span>
+                        </div>
+                        <div class="text-xs text-slate-400">الاستجابة: <strong class="text-sovereign-accent">8ms</strong></div>
+                        <div class="text-[11px] text-slate-500">Raft Quorum Arbitrator</div>
+                    </div>
+
+                    <div class="glass-card p-4 rounded-xl space-y-1.5">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-white">ورقلة (Sahara Edge)</span>
+                            <span class="text-emerald-400 font-mono text-[10px] px-1.5 py-0.5 rounded bg-emerald-950/60 border border-emerald-800">dz-south-1</span>
+                        </div>
+                        <div class="text-xs text-slate-400">الاستجابة: <strong class="text-sovereign-accent">15ms</strong></div>
+                        <div class="text-[11px] text-slate-500">حاسي مسعود وIoT الفلاحة</div>
+                    </div>
+                </div>
+
+                <!-- Recent Events Terminal Mini -->
+                <div class="glass-card rounded-2xl p-5 space-y-2">
+                    <div class="flex items-center justify-between text-xs font-bold text-white border-b border-slate-800 pb-2">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-terminal text-sovereign-accent"></i>
+                            سجل الأحداث السيادية والتحويل اللحظي
+                        </span>
+                        <span class="font-mono text-[10px] text-slate-400">BGP ANYCAST OK</span>
+                    </div>
+                    <div id="events-log" class="p-3 bg-black/70 rounded-xl font-mono text-xs text-slate-300 space-y-1 max-h-36 overflow-y-auto">
+                        <p class="text-slate-500">[14:30:01] System health check passed across dz-north-1, dz-west-1, dz-east-1, dz-south-1.</p>
+                        <p class="text-emerald-400">[14:30:15] Patroni Raft consensus verified: 3/3 nodes in sync.</p>
+                        <p class="text-sovereign-accent">[14:30:42] DZ-IX national peering active. Zero egress fees applied.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 2: POSTGIS DATABASE MANAGEMENT -->
+            <div id="page-postgis" class="hidden space-y-6">
+                <div class="glass-card rounded-2xl p-6 border-r-4 border-r-sovereign-accent flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-database text-sovereign-accent"></i>
+                            إدارة قواعد البيانات المكانية (PostGIS DBaaS Engine)
+                        </h2>
+                        <p class="text-xs text-slate-400">مراقبة العقد المكانية، الفهارس الجغرافية، والتوسع التلقائي (Auto-scaling).</p>
+                    </div>
+                    <button onclick="createNewDatabaseModal()" class="bg-sovereign-accent text-sovereign-900 px-4 py-2 rounded-xl text-xs font-bold hover:bg-sovereign-accent/80 transition cursor-pointer shrink-0">
+                        + إنشاء قاعدة بيانات جديدة
+                    </button>
+                </div>
+
+                <!-- Auto-Scaling & Storage Controls -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="text-xs font-bold text-slate-400">التوسع التلقائي للذاكرة (Auto-scale RAM)</div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold font-mono text-white" id="db-ram-display">32 GB</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">Dynamic</span>
+                        </div>
+                        <input type="range" min="8" max="128" step="8" value="32" oninput="document.getElementById('db-ram-display').innerText = this.value + ' GB'" class="w-full h-1.5 bg-slate-900 rounded appearance-none cursor-pointer accent-cyan-400">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono"><span>8GB</span><span>64GB</span><span>128GB</span></div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="text-xs font-bold text-slate-400">سعة التخزين الكتلي (NVMe-oF Storage)</div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-xl font-bold font-mono text-sovereign-accent" id="db-storage-display">500 GB</span>
+                            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950 text-cyan-400 border border-cyan-800">100G RDMA</span>
+                        </div>
+                        <input type="range" min="100" max="2000" step="100" value="500" oninput="document.getElementById('db-storage-display').innerText = this.value + ' GB'" class="w-full h-1.5 bg-slate-900 rounded appearance-none cursor-pointer accent-cyan-400">
+                        <div class="flex justify-between text-[10px] text-slate-500 font-mono"><span>100GB</span><span>1000GB</span><span>2000GB</span></div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="text-xs font-bold text-slate-400">حالة الاسترجاع الزمني (PITR Window)</div>
+                        <div class="text-xl font-bold font-mono text-amber-400">30 يوماً متواصلة</div>
+                        <div class="text-xs text-slate-400">استرجاع دقيق لأي ثانية عبر أرشيف S3 المشفر داخل الجزائر.</div>
+                    </div>
+                </div>
+
+                <!-- PostGIS Active Instances Table -->
+                <div class="glass-card rounded-2xl p-6 space-y-4">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h3 class="font-bold text-sm text-white">عناقيد قواعد البيانات المكانية النشطة</h3>
+                        <span class="text-xs text-slate-400 font-mono">PostgreSQL 16.3 + PostGIS 3.4</span>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-right text-xs">
+                            <thead class="text-slate-400 border-b border-slate-800">
+                                <tr>
+                                    <th class="pb-3 font-bold">اسم قاعدة البيانات</th>
+                                    <th class="pb-3 font-bold">المنطقة والوضع</th>
+                                    <th class="pb-3 font-bold">إضافات Spatial Active</th>
+                                    <th class="pb-3 font-bold">حالة المزامنة HA</th>
+                                    <th class="pb-3 font-bold">الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800/60 text-slate-300" id="db-table-body">
+                                <tr>
+                                    <td class="py-3.5 font-bold text-white">db-satim-gis-prod</td>
+                                    <td class="py-3.5"><span class="text-sovereign-accent font-mono">dz-north-1</span> (Primary Leader)</td>
+                                    <td class="py-3.5">
+                                        <span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">PostGIS 3.4</span>
+                                        <span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">pgvector</span>
+                                        <span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">hstore</span>
+                                    </td>
+                                    <td class="py-3.5 text-emerald-400 font-bold">Patroni Sync (RPO=0)</td>
+                                    <td class="py-3.5">
+                                        <button onclick="alert('فتح موجه أوامر psql لقاعدة db-satim-gis-prod')" class="text-sovereign-accent hover:underline cursor-pointer">إدارة</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 font-bold text-white">db-felaha-agri-map</td>
+                                    <td class="py-3.5"><span class="text-emerald-400 font-mono">dz-south-1</span> (Ouargla Edge)</td>
+                                    <td class="py-3.5">
+                                        <span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">PostGIS</span>
+                                        <span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">Raster</span>
+                                        <span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">TimescaleDB</span>
+                                    </td>
+                                    <td class="py-3.5 text-emerald-400 font-bold">Active Replica (Edge)</td>
+                                    <td class="py-3.5">
+                                        <button onclick="alert('استعراض المخطط الجغرافي لحقول بسكرة والوادي')" class="text-sovereign-accent hover:underline cursor-pointer">إدارة</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3.5 font-bold text-white">db-logistiq-routing</td>
+                                    <td class="py-3.5"><span class="text-cyan-400 font-mono">dz-west-1</span> (Oran Port)</td>
+                                    <td class="py-3.5">
+                                        <span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">pgRouting</span>
+                                        <span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">PostGIS</span>
+                                    </td>
+                                    <td class="py-3.5 text-emerald-400 font-bold">Multi-Master Read Pool</td>
+                                    <td class="py-3.5">
+                                        <button onclick="alert('إدارة مسارات شبكة الطرق الوطنية')" class="text-sovereign-accent hover:underline cursor-pointer">إدارة</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: IOT & COLD CHAIN MONITORING -->
+            <div id="page-iot-logistics" class="hidden space-y-6">
+                <div class="glass-card rounded-2xl p-6 border-r-4 border-r-emerald-500 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-truck-ramp-box text-emerald-400"></i>
+                            مراقبة أسطول النقل المبرد ومزارع IoT (Atlas Logistiq & Felaha)
+                        </h2>
+                        <p class="text-xs text-slate-400">تتبع لحظي لدرجات الحرارة، الرطوبة، ومواقع الشاحنات عبر عقدة الجنوب (dz-south-1 ورقلة)</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="simulateColdBreach()" class="px-3 py-1.5 rounded-lg bg-rose-950/80 border border-rose-800/80 text-rose-300 text-xs font-bold hover:bg-rose-900 transition cursor-pointer">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            محاكاة خرق حراري
+                        </button>
+                        <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-xs font-bold">
+                            MQTT Broker: متصل
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Cold Chain Fleet Metrics -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span>شاحنات الأدوية والأغذية</span>
+                            <span class="text-emerald-400 font-bold">14 شاحنة نشطة</span>
+                        </div>
+                        <div class="text-xl font-bold text-white">متوسط درجة الحرارة: <span id="fleet-avg-temp" class="text-sovereign-accent">+3.2°C</span></div>
+                        <div class="text-[11px] text-slate-400">النطاق المسموح: +2°C إلى +6°C</div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span>مستشعرات المزارع (بسكرة/وادي سوف)</span>
+                            <span class="text-emerald-400 font-bold">128 نقطة</span>
+                        </div>
+                        <div class="text-xl font-bold text-white">رطوبة التربة: <span class="text-emerald-400">68%</span></div>
+                        <div class="text-[11px] text-slate-400">نظام الري الذكي: تلقائي (SCADA)</div>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-2xl space-y-2">
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span>التنبيهات والحرارة</span>
+                            <span class="text-emerald-400 font-bold" id="cold-incidents-count">0 حوادث حرارية</span>
+                        </div>
+                        <div class="text-xl font-bold text-white">حالة سلاسل التبريد: <span id="cold-chain-status" class="text-emerald-400">آمنة 100%</span></div>
+                        <div class="text-[11px] text-slate-400">تحديث البيانات: كل 3 ثوانٍ</div>
+                    </div>
+                </div>
+
+                <!-- Sensor Stream Log -->
+                <div class="glass-card rounded-2xl p-6 space-y-3">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <h3 class="font-bold text-sm text-white">سجل القراءات اللحظي عبر وسيط MQTT (Live Sensor Stream)</h3>
+                        <span class="text-xs font-mono text-emerald-400">dz-south-1 Edge POP</span>
+                    </div>
+                    <div id="sensor-stream" class="p-4 rounded-xl bg-black/80 font-mono text-xs space-y-2 text-slate-300 border border-slate-800 max-h-48 overflow-y-auto">
+                        <p class="text-emerald-400">[IoT-Node-44] Truck-DZ-023 (Algiers -> Oran): Temp: +3.1°C | Humidity: 55% | GPS: 36.7538° N, 3.0588° E</p>
+                        <p class="text-sovereign-accent">[Agri-Node-102] Biskra Olive Farm Plot-04: Soil Moisture: 68% | Ambient Temp: 28.4°C | Status: Optimal</p>
+                        <p class="text-cyan-300">[IoT-Node-12] Pharma-Truck-Saidal (Constantine -> Ouargla): Temp: +4.0°C | Reefer Compressor: 100% OK</p>
+                        <p class="text-slate-400">[System] Stream latency to dz-south-1 Edge: 12ms. (Zero Egress)</p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-slate-800 px-6 py-4 text-center text-xs text-slate-500">
+        <p>AtlasCloud Sovereign Platform © 2026. مصممة ومدارة بالكامل وفق المعايير والسيادة الوطنية للجمهورية الجزائرية.</p>
+    </footer>
+
+    <!-- Tab Switcher JS Script -->
+    <script>
+        function switchTab(tabId) {
+            // Hide all pages
+            document.getElementById('page-dashboard').classList.add('hidden');
+            document.getElementById('page-postgis').classList.add('hidden');
+            document.getElementById('page-iot-logistics').classList.add('hidden');
+
+            // Deactivate all nav items
+            document.getElementById('nav-dashboard').classList.remove('active');
+            document.getElementById('nav-postgis').classList.remove('active');
+            document.getElementById('nav-iot-logistics').classList.remove('active');
+
+            // Show selected page and activate button
+            document.getElementById('page-' + tabId).classList.remove('hidden');
+            document.getElementById('nav-' + tabId).classList.add('active');
+        }
+
+        function triggerQuickChaos() {
+            switchTab('dashboard');
+            const log = document.getElementById('events-log');
+            const p = document.createElement('p');
+            p.className = 'text-rose-400 font-bold';
+            p.innerText = `[${new Date().toLocaleTimeString('ar-DZ')}] ! CRITICAL: Algiers link disrupted. Patroni auto-promoted Oran in 240ms (RPO=0).`;
+            log.prepend(p);
+        }
+
+        function createNewDatabaseModal() {
+            const dbName = prompt('أدخل اسم قاعدة البيانات المكانية الجديدة (مثال: db-sahara-wheat-gis):', 'db-sahara-wheat-gis');
+            if (dbName) {
+                const tbody = document.getElementById('db-table-body');
+                const tr = document.createElement('tr');
+                tr.className = "bg-emerald-950/20";
+                tr.innerHTML = `
+                    <td class="py-3.5 font-bold text-white">${dbName}</td>
+                    <td class="py-3.5"><span class="text-emerald-400 font-mono">dz-south-1</span> (Provisioned)</td>
+                    <td class="py-3.5"><span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">PostGIS 3.4</span> <span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px]">pgvector</span></td>
+                    <td class="py-3.5 text-emerald-400 font-bold">Active Single (HA Sync)</td>
+                    <td class="py-3.5"><button class="text-sovereign-accent hover:underline cursor-pointer">إدارة</button></td>
+                `;
+                tbody.prepend(tr);
+                alert(`تم إنشاء قاعدة البيانات ${dbName} بنجاح في أقل من 35 ثانية!`);
+            }
+        }
+
+        function simulateColdBreach() {
+            document.getElementById('fleet-avg-temp').innerText = "+9.4°C";
+            document.getElementById('fleet-avg-temp').className = "text-rose-500 font-bold animate-pulse";
+            document.getElementById('cold-incidents-count').innerText = "1 حادث حراري!";
+            document.getElementById('cold-incidents-count').className = "text-rose-400 font-bold";
+            document.getElementById('cold-chain-status').innerText = "تنبيه خرق حراري!";
+            document.getElementById('cold-chain-status').className = "text-rose-400 font-bold animate-pulse";
+
+            const stream = document.getElementById('sensor-stream');
+            const p = document.createElement('p');
+            p.className = "text-rose-400 font-bold bg-rose-950/40 p-1 rounded";
+            p.innerText = `[${new Date().toLocaleTimeString('ar-DZ')}] ⚠️ CRITICAL ALARM: Truck-DZ-041 (Ghardaia Highway) temp breached threshold: +9.4°C! Auto-rerouting to nearest cold depot via PostGIS.`;
+            stream.prepend(p);
+        }
+
+        const API_BASE = "http://localhost:8080/api/v1";
+        const WS_BASE = "ws://localhost:8080/ws/v1/iot/stream";
+
+        // جلب قواعد بيانات PostGIS من API
+        async function loadPostGISDatabases() {
+            try {
+                const res = await fetch(`${API_BASE}/databases/postgis`);
+                const databases = await res.json();
+                
+                const tbody = document.querySelector("#page-postgis tbody");
+                if (!tbody) return;
+
+                tbody.innerHTML = databases.map(db => `
+                    <tr>
+                        <td class="py-3.5 font-bold text-white">${db.name}</td>
+                        <td class="py-3.5"><span class="text-sovereign-accent">${db.region}</span></td>
+                        <td class="py-3.5">
+                            ${db.active_extensions.map(ext => `<span class="px-2 py-0.5 rounded bg-slate-800 font-mono text-[10px] ml-1">${ext}</span>`).join('')}
+                        </td>
+                        <td class="py-3.5 text-emerald-400 font-bold">${db.ha_sync_status}</td>
+                        <td class="py-3.5"><button onclick="alert('إدارة قاعدة البيانات: ${db.name}')" class="text-sovereign-accent hover:underline cursor-pointer">إدارة</button></td>
+                    </tr>
+                `).join('');
+            } catch (err) {
+                console.log("استخدام البيانات المحلية الافتراضية لقواعد البيانات المكانية:", err);
+            }
+        }
+
+        // الربط مع بث WebSocket للـ IoT
+        function connectIoTStream() {
+            try {
+                const socket = new WebSocket(WS_BASE);
+                const logBox = document.querySelector("#page-iot-logistics .font-mono");
+
+                socket.onopen = () => {
+                    console.log("Connected to Go WebSocket stream!");
+                };
+
+                socket.onmessage = (event) => {
+                    const sensors = JSON.parse(event.data);
+                    if (!logBox) return;
+
+                    logBox.innerHTML = sensors.map(s => `
+                        <p class="${s.node_id && s.node_id.includes('IoT') ? 'text-emerald-400' : 'text-sovereign-accent'}">
+                            [${s.timestamp}] [${s.node_id}] ${s.device_name}: Temp: +${s.temperature}°C | Humidity: ${s.humidity}% | GPS: ${s.latitude}° N, ${s.longitude}° E
+                        </p>
+                    `).join('') + `<p class="text-slate-500">[System] Realtime Go WebSocket Stream Active (Port :8080)</p>`;
+                };
+
+                socket.onclose = () => {
+                    setTimeout(connectIoTStream, 3000); // إعادة الاتصال تلقائياً
+                };
+
+                socket.onerror = () => {
+                    socket.close();
+                };
+            } catch (e) {
+                console.log("WebSocket client exception:", e);
+            }
+        }
+
+        // تشغيل الربط عند التحميل
+        window.addEventListener("DOMContentLoaded", () => {
+            loadPostGISDatabases();
+            connectIoTStream();
+        });
+    </script>
+</body>
+</html>

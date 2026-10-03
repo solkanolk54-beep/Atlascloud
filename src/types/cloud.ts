@@ -202,3 +202,95 @@ export interface NichePreemptionPlay {
   competitorBarrierAr: string;
   competitorBarrierEn: string;
 }
+
+export interface MigrationStep {
+  stepNumber: number;
+  titleAr: string;
+  titleEn: string;
+  phaseAr: string;
+  phaseEn: string;
+  commandSnippet: string;
+  technicalDetailsAr: string;
+  technicalDetailsEn: string;
+  zeroDowntimeMechanismAr: string;
+  zeroDowntimeMechanismEn: string;
+}
+
+export interface HackathonPillar {
+  titleAr: string;
+  titleEn: string;
+  prizeDzd: string;
+  descriptionAr: string;
+  descriptionEn: string;
+  deliverablesAr: string[];
+  deliverablesEn: string[];
+}
+
+export interface ComputePricingTier {
+  planId: string;
+  name: string;
+  nameAr: string;
+  vcpu: number;
+  ramGb: number;
+  perSecondDzd: number;
+  perMonthDzd: number;
+  recommendedForAr: string;
+  recommendedForEn: string;
+  burstFrequencyGhz: string;
+}
+
+export interface DbaasPricingTier {
+  engine: string;
+  engineAr: string;
+  spec: string;
+  ramGb: number;
+  storageGb: number;
+  haModeAr: string;
+  haModeEn: string;
+  perMonthDzd: number;
+  featuresAr: string[];
+  featuresEn: string[];
+}
+
+export interface StoragePricingItem {
+  storageType: string;
+  storageTypeAr: string;
+  performanceClass: string;
+  pricePerGbMonthDzd: number;
+  durability: string;
+  iopsLimit: string;
+  featuresAr: string[];
+  featuresEn: string[];
+}
+
+export interface DetailedSolutionBrief {
+  id: string;
+  brandName: string;
+  brandNameAr: string;
+  taglineAr: string;
+  taglineEn: string;
+  targetAudienceAr: string;
+  targetAudienceEn: string;
+  regionsInvolved: string[];
+  keyPainPointsAr: string[];
+  keyPainPointsEn: string[];
+  technicalArchitectureAr: string;
+  technicalArchitectureEn: string;
+  architectureHighlightsAr: string[];
+  architectureHighlightsEn: string[];
+  postGisSnippet: string;
+  roiSummaryAr: string;
+  roiSummaryEn: string;
+}
+
+export interface OutreachEmail {
+  id: string;
+  targetVerticalAr: string;
+  targetVerticalEn: string;
+  recipientPersonaAr: string;
+  recipientPersonaEn: string;
+  subjectAr: string;
+  subjectEn: string;
+  bodyAr: string;
+  bodyEn: string;
+}

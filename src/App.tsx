@@ -10,6 +10,9 @@ import { GoToMarketStrategy } from './components/GoToMarketStrategy';
 import { CompetitorBenchmark } from './components/CompetitorBenchmark';
 import { TechStackBlueprint } from './components/TechStackBlueprint';
 import { DeveloperExperience } from './components/DeveloperExperience';
+import { DevRelBlueprint } from './components/DevRelBlueprint';
+import { CommercialPricingCatalog } from './components/CommercialPricingCatalog';
+import { VerticalSolutionBriefs } from './components/VerticalSolutionBriefs';
 import { MobileVsDxAnalysis } from './components/MobileVsDxAnalysis';
 import { SovereignCompliance } from './components/SovereignCompliance';
 import { Server, ShieldCheck, Terminal, Layers, ArrowUpRight, Cpu } from 'lucide-react';
@@ -117,6 +120,21 @@ export default function App() {
         {/* Section 1: CMO B2B Launch Strategy, Promotional Packages & Verticals */}
         <section id="cmo-launch" className="scroll-mt-20">
           <CmoLaunchStrategy language={language} />
+        </section>
+
+        {/* Section: Commercial Pricing Catalog & Interactive TCO Savings Formulation */}
+        <section id="commercial-pricing" className="scroll-mt-20">
+          <CommercialPricingCatalog language={language} />
+        </section>
+
+        {/* Section: Vertical Solution Architecture Briefs (Atlas Felaha & Atlas Logistiq) */}
+        <section id="vertical-solutions" className="scroll-mt-20">
+          <VerticalSolutionBriefs language={language} />
+        </section>
+
+        {/* Section: DevRel Blueprint, GitHub Demo Repo, Zero-Downtime Migration & HackDZ */}
+        <section id="devrel-blueprint" className="scroll-mt-20">
+          <DevRelBlueprint language={language} />
         </section>
 
         {/* Section 2: Competitive Intelligence, Threat Modeling & 2028 Expansion Scenarios */}

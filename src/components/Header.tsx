@@ -21,11 +21,11 @@ export const Header: React.FC<HeaderProps> = ({
 
   const navLinks = [
     { id: 'topology', labelAr: 'الشبكة الموزعة', labelEn: 'Distributed Topology' },
-    { id: 'cmo-launch', labelAr: 'استراتيجية الـ CMO والباقات', labelEn: 'CMO Strategy & Tiers' },
-    { id: 'competitive-intel', labelAr: 'رصد المنافس وأفق 2028', labelEn: 'Threat Intel 2028' },
+    { id: 'commercial-pricing', labelAr: 'الأسعار وحاسبة التوفير', labelEn: 'Pricing & TCO' },
+    { id: 'vertical-solutions', labelAr: 'فلاحة ولوجستيك', labelEn: 'Felaha & Logistiq' },
+    { id: 'devrel-blueprint', labelAr: 'مستودع GitHub والهاكاثون', labelEn: 'GitHub & HackDZ' },
+    { id: 'cmo-launch', labelAr: 'استراتيجية الـ CMO', labelEn: 'CMO Strategy' },
     { id: 'compliance', labelAr: 'الأمن والامتثال البنكي', labelEn: 'Security & Compliance' },
-    { id: 'risk-dr', labelAr: 'ثغرات المنافس والتعافي', labelEn: 'Risks & Geo-DR' },
-    { id: 'dx-platform', labelAr: 'أدوات المطورين والـ CLI', labelEn: 'Developer DX' },
   ];
 
   return (
@@ -67,7 +67,16 @@ export const Header: React.FC<HeaderProps> = ({
         </nav>
 
         {/* Zone 3: Primary Actions (Language Toggle & Failover Trigger) */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2.5 shrink-0">
+          <a
+            href="/dashboard-v2.html"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-teal-300 bg-teal-950/70 border border-teal-700/80 rounded-md hover:bg-teal-900 transition-colors whitespace-nowrap shadow-sm shadow-teal-950"
+            title="فتح لوحة القيادة v2 المتقدمة (قواعد بيانات PostGIS وسلاسل التبريد)"
+          >
+            <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse" />
+            <span>{isAr ? 'لوحة التحكم v2 (PostGIS & IoT)' : 'Live Console v2'}</span>
+          </a>
+
           <button
             onClick={() => onLanguageChange(isAr ? 'en' : 'ar')}
             className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-200 bg-slate-900 border border-slate-800 rounded-md hover:bg-slate-800 transition-colors whitespace-nowrap cursor-pointer"
@@ -82,7 +91,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-slate-950 bg-cyan-400 hover:bg-cyan-300 rounded-md transition-colors whitespace-nowrap shadow-sm shadow-cyan-950 cursor-pointer"
           >
             <Terminal className="w-3.5 h-3.5" />
-            <span>{isAr ? 'محاكاة اختبار الصمود' : 'Simulate Failover'}</span>
+            <span>{isAr ? 'محاكاة الصمود' : 'Simulate Failover'}</span>
           </button>
         </div>
       </div>
